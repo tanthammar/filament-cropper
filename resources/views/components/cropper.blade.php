@@ -17,6 +17,7 @@
         $imageResizeTargetHeight = $getImageResizeTargetHeight();
         $imageResizeTargetWidth = $getImageResizeTargetWidth();
         $imageResizeMode = $getImageResizeMode();
+        $imageResizeUpscale = $getImageResizeUpscale();
         $shouldTransformImage = $imageCropAspectRatio || $imageResizeTargetHeight || $imageResizeTargetWidth;
     @endphp
 
@@ -183,7 +184,7 @@
                                 <div class="py-2">
                                     <div class="flex">
                                         <input
-                                            x-modal="rotateDegree"
+                                            x-model="rotateDegree"
                                             :value="rotateDegree"
                                             type="range"
                                             class="w-full focus:outline-none focus:bg-primary-200 dark:focus:bg-primary-900 disabled:opacity-70 disabled:cursor-not-allowed filament-forms-range-component border-gray-300 bg-gray-200 dark:bg-white/10 w-90"
@@ -308,14 +309,14 @@
                                             title="Zoom In"
                                             x-on:click.prevent="zoomByValue({{$getZoomStep()}})"
                                             type="button" class="action">
-                                            <x-heroicon-o-zoom-in class="w-4 h-4"/>
+                                            @svg('heroicon-o-zoom-in', "w-4 h-4")
                                         </button>
 
                                         <button
                                             title="Zoom Out"
                                             x-on:click.prevent="zoomByValue(-{{$getZoomStep()}})"
                                             type="button" class="action">
-                                            <x-heroicon-o-zoom-out class="w-4 h-4"/>
+                                            @svg('heroicon-o-zoom-out', "w-4 h-4")
                                         </button>
                                     </div>
                                 @endif

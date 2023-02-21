@@ -4,6 +4,7 @@ namespace Nuhel\FilamentCropper\Components;
 
 use Closure;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Nuhel\FilamentCropper\Concerns\CanGenerateThumbnail;
 use Nuhel\FilamentCropper\Concerns\CanRotateImage;
 use Nuhel\FilamentCropper\Concerns\CanFlipImage;
@@ -13,7 +14,7 @@ use Nuhel\FilamentCropper\Concerns\HasViewMode;
 use Nuhel\FilamentCropper\Values\DragMode;
 
 
-class Cropper extends FileUpload
+class Cropper extends SpatieMediaLibraryFileUpload
 {
     use CanFlipImage, CanRotateImage, CanZoomImage, HasViewMode, HasAspectRatio, CanGenerateThumbnail;
 
@@ -26,9 +27,6 @@ class Cropper extends FileUpload
     protected string|Closure|null $modalSize = '6xl';
 
     protected string|Closure|null $modalHeading = 'Manage Image';
-
-
-
 
     protected DragMode|Closure $dragMode;
 
