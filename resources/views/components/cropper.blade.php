@@ -43,7 +43,6 @@
             getUploadedFileUrlsUsing: async () => {
                 return await $wire.getUploadedFileUrls('{{ $getStatePath() }}')
             },
-            imageCropAspectRatio: null,
             imageCropAspectRatio: {{ $imageCropAspectRatio ? "'{$imageCropAspectRatio}'" : 'null' }},
             imagePreviewHeight: {{ ($height = $getImagePreviewHeight()) ? "'{$height}'" : 'null' }},
             imageResizeMode: {{ $imageResizeMode ? "'{$imageResizeMode}'" : 'null' }},
@@ -97,7 +96,6 @@
                 type="file"
                 {{ $getExtraInputAttributeBag() }}
                 dusk="filament.forms.{{ $getStatePath() }}"
-
             />
         </div>
 
