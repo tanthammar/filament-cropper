@@ -44,10 +44,12 @@
                 return await $wire.getUploadedFileUrls('{{ $getStatePath() }}')
             },
             imageCropAspectRatio: null,
+            imageCropAspectRatio: {{ $imageCropAspectRatio ? "'{$imageCropAspectRatio}'" : 'null' }},
             imagePreviewHeight: {{ ($height = $getImagePreviewHeight()) ? "'{$height}'" : 'null' }},
             imageResizeMode: {{ $imageResizeMode ? "'{$imageResizeMode}'" : 'null' }},
             imageResizeTargetHeight: {{ $imageResizeTargetHeight ? "'{$imageResizeTargetHeight}'" : 'null' }},
             imageResizeTargetWidth: {{ $imageResizeTargetWidth ? "'{$imageResizeTargetWidth}'" : 'null' }},
+            imageResizeUpscale: {{ $imageResizeUpscale ? 'true' : 'false' }},
             isAvatar: {{ $isAvatar() ? 'true' : 'false' }},
             loadingIndicatorPosition: '{{ $getLoadingIndicatorPosition() }}',
             locale: @js(app()->getLocale()),
@@ -66,6 +68,7 @@
                 return await $wire.reorderUploadedFiles('{{ $getStatePath() }}', files)
             },
             shouldAppendFiles: {{ $shouldAppendFiles() ? 'true' : 'false' }},
+            shouldOrientImageFromExif: {{ $shouldOrientImageFromExif() ? 'true' : 'false' }},
             shouldTransformImage: {{ $shouldTransformImage ? 'true' : 'false' }},
             state: $wire.{{ $applyStateBindingModifiers('entangle(\'' . $getStatePath() . '\')') }},
             uploadButtonPosition: '{{ $getUploadButtonPosition() }}',
