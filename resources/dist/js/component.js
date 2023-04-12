@@ -103,38 +103,32 @@ document.addEventListener('alpine:init', () => {
         },
 
         uploadCropperImage(){
-
-            const input = document.getElementById(this.statePath).querySelector('input[type="file"]');
-            const fileName = this.filename;
-            const fileType = this.filetype;
+            let ref = this;
 
             this.cropper.getCroppedCanvas({
-                maxWidth: this.width,
-                maxHeight: this.height,
+                maxWidth: ref.width,
+                maxHeight: ref.height,
             }).toBlob((croppedImage) => {
+
+                let input = document.getElementById(this.statePath).querySelector('input[type="file"]')
                 let event = new Event('change');
+                let fileName = ref.filename;
+                let filetype = ref.filetype;
                 let file = new File(
                     [croppedImage],
                     fileName,
-                    {type:fileType, lastModified:new Date().getTime()},
+                    {type:filetype, lastModified:new Date().getTime()},
                     'utf-8'
                 );
 
                 let container = new DataTransfer();
                 container.items.add(file);
+
                 input.files = container.files;
-
-                // close the modal
-                this.$dispatch('close-modal', { id: `cropper-modal-${this.statePath}`, files: null })
+                ref.$dispatch("close-modal", {id: "cropper-modal-"+ref.statePath, files: null})
                 input.dispatchEvent(event);
+            },  ref.filetype);
 
-                // reset the component state
-                this.showCropper = false;
-                this.filename = '';
-                this.filetype = '';
-                this.cropper.destroy();
-                this.cropper = null;
-            },  fileType);
-        },
+        }
     }))
 })
