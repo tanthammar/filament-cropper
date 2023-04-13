@@ -26,15 +26,22 @@ class FilamentCropperServiceProvider extends PackageServiceProvider
         $this->app->resolving(AssetManager::class, function () {
 
             \Filament\Support\Facades\FilamentAsset::register([
-                Css::make('cropper-css', 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css'),
-                Js::make('cropper-js', 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js'),
+                //These are loaded in the blade file with custom alpine dirctive x-load
+                //Css::make('cropper-css', 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css'),
+                //Js::make('cropper-js', 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js'),
 
-                Css::make('filament-cropper-css', __DIR__ . '/../resources/dist/css/filament-cropper.css'),
+                //Css::make('filament-cropper-css', __DIR__ . '/../resources/dist/css/filament-cropper.css'),
                 AlpineComponent::make('filament-cropper', __DIR__ . '/../resources/dist/js/filament-cropper.js'),
 
             ], 'nuhel/filament-cropper');
 
         });
     }
+
+    /** commands
+     * first compile the js and css, then publish the assets with Spatie's package tools
+     npx esbuild resources/js/filament-cropper.js --outfile=resources/dist/js/filament-cropper.js --bundle --minify --platform=neutral
+     php artisan vendor:publish --tag=filament-cropper-assets
+     */
 
 }

@@ -29,6 +29,12 @@
     >
 
         <div
+            x-load-css="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"
+            x-load-js="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"
+            x-load-css="{{ asset('vendor/filament-cropper/js/filament-cropper.css') }}"
+            x-ignore
+            ax-load
+            ax-load-src="@FilamentAlpineComponent('filament-cropper', 'nuhel/filament-cropper')"
             x-data="fileUploadFormComponent({
             acceptedFileTypes: {{ json_encode($getAcceptedFileTypes()) }},
             canDownload: {{ $canDownload() ? 'true' : 'false' }},
