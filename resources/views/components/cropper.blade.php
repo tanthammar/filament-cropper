@@ -22,70 +22,73 @@
     @endphp
 
 
-    <div class="relative" x-data="{
-        fileHasUploaded : false,
-        fileHasDeleted: false,
-     }"
+    <div class="relative"
+         x-data="{
+            fileHasUploaded : false,
+            fileHasDeleted: false,
+         }"
+         x-load-css="[
+                'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css',
+                '{{ asset('vendor/filament-cropper/js/filament-cropper.css') }}'
+            ]"
+         x-load-js="['https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js']"
     >
 
         <div
-            x-load-css="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"
-            x-load-js="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"
-            x-load-css="{{ asset('vendor/filament-cropper/js/filament-cropper.css') }}"
             x-ignore
-            ax-load
+            ax-load="visible"
             ax-load-src="@FilamentAlpineComponent('filament-cropper', 'nuhel/filament-cropper')"
             x-data="fileUploadFormComponent({
-            acceptedFileTypes: {{ json_encode($getAcceptedFileTypes()) }},
-            canDownload: {{ $canDownload() ? 'true' : 'false' }},
-            canOpen: {{ $canOpen() ? 'true' : 'false' }},
-            canPreview: {{ $canPreview() ? 'true' : 'false' }},
-            canReorder: {{ $canReorder() ? 'true' : 'false' }},
-            deleteUploadedFileUsing: async (fileKey) => {
-                fileHasDeleted = true;
-                fileHasUploaded = false;
-                return await $wire.deleteUploadedFile('{{ $getStatePath() }}', fileKey)
-            },
-            getUploadedFileUrlsUsing: async () => {
-                return await $wire.getUploadedFileUrls('{{ $getStatePath() }}')
-            },
-            imageCropAspectRatio: {{ $imageCropAspectRatio ? "'{$imageCropAspectRatio}'" : 'null' }},
-            imagePreviewHeight: {{ ($height = $getImagePreviewHeight()) ? "'{$height}'" : 'null' }},
-            imageResizeMode: {{ $imageResizeMode ? "'{$imageResizeMode}'" : 'null' }},
-            imageResizeTargetHeight: {{ $imageResizeTargetHeight ? "'{$imageResizeTargetHeight}'" : 'null' }},
-            imageResizeTargetWidth: {{ $imageResizeTargetWidth ? "'{$imageResizeTargetWidth}'" : 'null' }},
-            imageResizeUpscale: {{ $imageResizeUpscale ? 'true' : 'false' }},
-            isAvatar: {{ $isAvatar() ? 'true' : 'false' }},
-            loadingIndicatorPosition: '{{ $getLoadingIndicatorPosition() }}',
-            locale: @js(app()->getLocale()),
-            panelAspectRatio: {{ ($aspectRatio = $getPanelAspectRatio()) ? "'{$aspectRatio}'" : 'null' }},
-            panelLayout: {{ ($layout = $getPanelLayout()) ? "'{$layout}'" : 'null' }},
-            placeholder: @js($getPlaceholder()),
-            maxSize: {{ ($size = $getMaxSize()) ? "'{$size} KB'" : 'null' }},
-            minSize: {{ ($size = $getMinSize()) ? "'{$size} KB'" : 'null' }},
-            removeUploadedFileUsing: async (fileKey) => {
-                fileHasDeleted = true;
-                fileHasUploaded = false;
-                return await $wire.removeUploadedFile('{{ $getStatePath() }}', fileKey)
-            },
-            removeUploadedFileButtonPosition: '{{ $getRemoveUploadedFileButtonPosition() }}',
-            reorderUploadedFilesUsing: async (files) => {
-                return await $wire.reorderUploadedFiles('{{ $getStatePath() }}', files)
-            },
-            shouldAppendFiles: {{ $shouldAppendFiles() ? 'true' : 'false' }},
-            shouldOrientImageFromExif: {{ $shouldOrientImageFromExif() ? 'true' : 'false' }},
-            shouldTransformImage: {{ $shouldTransformImage ? 'true' : 'false' }},
-            state: $wire.{{ $applyStateBindingModifiers('entangle(\'' . $getStatePath() . '\')') }},
-            uploadButtonPosition: '{{ $getUploadButtonPosition() }}',
-            uploadProgressIndicatorPosition: '{{ $getUploadProgressIndicatorPosition() }}',
-            uploadUsing: (fileKey, file, success, error, progress) => {
-                $wire.upload(`{{ $getStatePath() }}.${fileKey}`, file, () => {
-                    fileHasUploaded = true;
-                    fileHasDeleted = false;
-                    success(fileKey)
-                }, error, progress)
-            },
-        })"
+                acceptedFileTypes: {{ json_encode($getAcceptedFileTypes()) }},
+                canDownload: {{ $canDownload() ? 'true' : 'false' }},
+                canOpen: {{ $canOpen() ? 'true' : 'false' }},
+                canPreview: {{ $canPreview() ? 'true' : 'false' }},
+                canReorder: {{ $canReorder() ? 'true' : 'false' }},
+                deleteUploadedFileUsing: async (fileKey) => {
+                    fileHasDeleted = true;
+                    fileHasUploaded = false;
+                    return await $wire.deleteUploadedFile('{{ $getStatePath() }}', fileKey)
+                },
+                getUploadedFileUrlsUsing: async () => {
+                    return await $wire.getUploadedFileUrls('{{ $getStatePath() }}')
+                },
+                imageCropAspectRatio: {{ $imageCropAspectRatio ? "'{$imageCropAspectRatio}'" : 'null' }},
+                imagePreviewHeight: {{ ($height = $getImagePreviewHeight()) ? "'{$height}'" : 'null' }},
+                imageResizeMode: {{ $imageResizeMode ? "'{$imageResizeMode}'" : 'null' }},
+                imageResizeTargetHeight: {{ $imageResizeTargetHeight ? "'{$imageResizeTargetHeight}'" : 'null' }},
+                imageResizeTargetWidth: {{ $imageResizeTargetWidth ? "'{$imageResizeTargetWidth}'" : 'null' }},
+                imageResizeUpscale: {{ $imageResizeUpscale ? 'true' : 'false' }},
+                isAvatar: {{ $isAvatar() ? 'true' : 'false' }},
+                loadingIndicatorPosition: '{{ $getLoadingIndicatorPosition() }}',
+                locale: @js(app()->getLocale()),
+                panelAspectRatio: {{ ($aspectRatio = $getPanelAspectRatio()) ? "'{$aspectRatio}'" : 'null' }},
+                panelLayout: {{ ($layout = $getPanelLayout()) ? "'{$layout}'" : 'null' }},
+                placeholder: @js($getPlaceholder()),
+                maxSize: {{ ($size = $getMaxSize()) ? "'{$size} KB'" : 'null' }},
+                minSize: {{ ($size = $getMinSize()) ? "'{$size} KB'" : 'null' }},
+                removeUploadedFileUsing: async (fileKey) => {
+                    fileHasDeleted = true;
+                    fileHasUploaded = false;
+                    return await $wire.removeUploadedFile('{{ $getStatePath() }}', fileKey)
+                },
+                removeUploadedFileButtonPosition: '{{ $getRemoveUploadedFileButtonPosition() }}',
+                reorderUploadedFilesUsing: async (files) => {
+                    return await $wire.reorderUploadedFiles('{{ $getStatePath() }}', files)
+                },
+                shouldAppendFiles: {{ $shouldAppendFiles() ? 'true' : 'false' }},
+                shouldOrientImageFromExif: {{ $shouldOrientImageFromExif() ? 'true' : 'false' }},
+                shouldTransformImage: {{ $shouldTransformImage ? 'true' : 'false' }},
+                state: $wire.{{ $applyStateBindingModifiers('entangle(\'' . $getStatePath() . '\')') }},
+                uploadButtonPosition: '{{ $getUploadButtonPosition() }}',
+                uploadProgressIndicatorPosition: '{{ $getUploadProgressIndicatorPosition() }}',
+                uploadUsing: (fileKey, file, success, error, progress) => {
+                    $wire.upload(`{{ $getStatePath() }}.${fileKey}`, file, () => {
+                        fileHasUploaded = true;
+                        fileHasDeleted = false;
+                        success(fileKey)
+                    }, error, progress)
+                },
+            })"
             wire:ignore
             {!! ($id = $getId()) ? "id=\"{$id}\"" : null !!}
             style="min-height: {{ $isAvatar() ? '8em' : ($getPanelLayout() === 'compact' ? '2.625em' : '4.75em') }}"
