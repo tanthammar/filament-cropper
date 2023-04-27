@@ -1,6 +1,7 @@
-import '../css/filament-cropper.css';
+import Cropper from 'cropperjs'
+import '../imports/filament-cropper.css'
 
-export default function imageCropper(config) {
+export default function FilamentCropper(config) {
     return {
         showCropper: false,
         filename: '',
@@ -112,7 +113,7 @@ export default function imageCropper(config) {
                 maxHeight: ref.height,
             }).toBlob((croppedImage) => {
 
-                let input = document.getElementById(this.statePath).querySelector('input[type="file"]')
+                let input = document.getElementById(this.statePath).querySelector('input[name="filepond"]')
                 let event = new Event('change');
                 let fileName = ref.filename;
                 let filetype = ref.filetype;

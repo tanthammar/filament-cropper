@@ -3,7 +3,6 @@
 namespace Nuhel\FilamentCropper\Components;
 
 use Closure;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Nuhel\FilamentCropper\Concerns\CanGenerateThumbnail;
 use Nuhel\FilamentCropper\Concerns\CanRotateImage;
@@ -18,7 +17,7 @@ class Cropper extends SpatieMediaLibraryFileUpload
 {
     use CanFlipImage, CanRotateImage, CanZoomImage, HasViewMode, HasAspectRatio, CanGenerateThumbnail;
 
-    protected string $view = 'filament-cropper::components.cropper';
+    protected string $view = 'filament-cropper::components.chatgpt';
 
     protected string|Closure|null $imageResizeTargetHeight = '400';
 

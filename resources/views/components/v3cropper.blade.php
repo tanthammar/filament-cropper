@@ -1,104 +1,107 @@
 <x-dynamic-component
     :component="$getFieldWrapperView()"
-    :id="$getId()"
-    :label="$getLabel()"
+    :field="$field"
     :label-sr-only="$isAvatar() || $isLabelHidden()"
-    :helper-text="$getHelperText()"
-    :hint="$getHint()"
-    :hint-action="$getHintAction()"
-    :hint-color="$getHintColor()"
-    :hint-icon="$getHintIcon()"
-    :required="$isRequired()"
-    :state-path="$getStatePath()"
 >
-
     @php
         $imageCropAspectRatio = $getImageCropAspectRatio();
         $imageResizeTargetHeight = $getImageResizeTargetHeight();
         $imageResizeTargetWidth = $getImageResizeTargetWidth();
-        $imageResizeMode = $getImageResizeMode();
-        $imageResizeUpscale = $getImageResizeUpscale();
-        $shouldTransformImage = $imageCropAspectRatio || $imageResizeTargetHeight || $imageResizeTargetWidth;
+        $statePath = $getStatePath();
     @endphp
 
-
-    <div class="relative" x-data="{
-        fileHasUploaded : false,
-        fileHasDeleted: false,
-     }"
+    <div class="relative"
+         x-load-css="[
+                '{{ asset('vendor/filament-cropper/filament-cropper.css') }}'
+         ]"
+         x-data="{
+            fileHasUploaded : false,
+            fileHasDeleted: false,
+         }"
     >
-
         <div
+            x-ignore
+            ax-load
+            ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('file-upload', 'filament/forms') }}"
             x-data="fileUploadFormComponent({
-            acceptedFileTypes: {{ json_encode($getAcceptedFileTypes()) }},
-            canDownload: {{ $canDownload() ? 'true' : 'false' }},
-            canOpen: {{ $canOpen() ? 'true' : 'false' }},
-            canPreview: {{ $canPreview() ? 'true' : 'false' }},
-            canReorder: {{ $canReorder() ? 'true' : 'false' }},
-            deleteUploadedFileUsing: async (fileKey) => {
-                fileHasDeleted = true;
-                fileHasUploaded = false;
-                return await $wire.deleteUploadedFile('{{ $getStatePath() }}', fileKey)
-            },
-            getUploadedFileUrlsUsing: async () => {
-                return await $wire.getUploadedFileUrls('{{ $getStatePath() }}')
-            },
-            imageCropAspectRatio: {{ $imageCropAspectRatio ? "'{$imageCropAspectRatio}'" : 'null' }},
-            imagePreviewHeight: {{ ($height = $getImagePreviewHeight()) ? "'{$height}'" : 'null' }},
-            imageResizeMode: {{ $imageResizeMode ? "'{$imageResizeMode}'" : 'null' }},
-            imageResizeTargetHeight: {{ $imageResizeTargetHeight ? "'{$imageResizeTargetHeight}'" : 'null' }},
-            imageResizeTargetWidth: {{ $imageResizeTargetWidth ? "'{$imageResizeTargetWidth}'" : 'null' }},
-            imageResizeUpscale: {{ $imageResizeUpscale ? 'true' : 'false' }},
-            isAvatar: {{ $isAvatar() ? 'true' : 'false' }},
-            loadingIndicatorPosition: '{{ $getLoadingIndicatorPosition() }}',
-            locale: @js(app()->getLocale()),
-            panelAspectRatio: {{ ($aspectRatio = $getPanelAspectRatio()) ? "'{$aspectRatio}'" : 'null' }},
-            panelLayout: {{ ($layout = $getPanelLayout()) ? "'{$layout}'" : 'null' }},
-            placeholder: @js($getPlaceholder()),
-            maxSize: {{ ($size = $getMaxSize()) ? "'{$size} KB'" : 'null' }},
-            minSize: {{ ($size = $getMinSize()) ? "'{$size} KB'" : 'null' }},
-            removeUploadedFileUsing: async (fileKey) => {
-                fileHasDeleted = true;
-                fileHasUploaded = false;
-                return await $wire.removeUploadedFile('{{ $getStatePath() }}', fileKey)
-            },
-            removeUploadedFileButtonPosition: '{{ $getRemoveUploadedFileButtonPosition() }}',
-            reorderUploadedFilesUsing: async (files) => {
-                return await $wire.reorderUploadedFiles('{{ $getStatePath() }}', files)
-            },
-            shouldAppendFiles: {{ $shouldAppendFiles() ? 'true' : 'false' }},
-            shouldOrientImageFromExif: {{ $shouldOrientImageFromExif() ? 'true' : 'false' }},
-            shouldTransformImage: {{ $shouldTransformImage ? 'true' : 'false' }},
-            state: $wire.{{ $applyStateBindingModifiers('entangle(\'' . $getStatePath() . '\')') }},
-            uploadButtonPosition: '{{ $getUploadButtonPosition() }}',
-            uploadProgressIndicatorPosition: '{{ $getUploadProgressIndicatorPosition() }}',
-            uploadUsing: (fileKey, file, success, error, progress) => {
-                $wire.upload(`{{ $getStatePath() }}.${fileKey}`, file, () => {
-                    fileHasUploaded = true;
-                    fileHasDeleted = false;
-                    success(fileKey)
-                }, error, progress)
-            },
-        })"
+                acceptedFileTypes: @js($getAcceptedFileTypes()),
+                deleteUploadedFileUsing: async (fileKey) => {
+                    fileHasDeleted = true;
+                    fileHasUploaded = false;
+                    return await $wire.deleteUploadedFile(@js($statePath), fileKey)
+                },
+                getUploadedFilesUsing: async () => {
+                    return await $wire.getUploadedFiles(@js($statePath))
+                },
+                imageCropAspectRatio: @js($imageCropAspectRatio),
+                imagePreviewHeight: @js($getImagePreviewHeight()),
+                imageResizeMode: @js($getImageResizeMode()),
+                imageResizeTargetHeight: @js($imageResizeTargetHeight),
+                imageResizeTargetWidth: @js($imageResizeTargetWidth),
+                imageResizeUpscale: @js($getImageResizeUpscale()),
+                isAvatar: {{ $isAvatar() ? 'true' : 'false' }},
+                isDownloadable: @js($isDownloadable()),
+                isOpenable: @js($isOpenable()),
+                isPreviewable: @js($isPreviewable()),
+                isReorderable: @js($isReorderable()),
+                loadingIndicatorPosition: @js($getLoadingIndicatorPosition()),
+                locale: @js(app()->getLocale()),
+                panelAspectRatio: @js($getPanelAspectRatio()),
+                panelLayout: @js($getPanelLayout()),
+                placeholder: @js($getPlaceholder()),
+                maxSize: {{ ($size = $getMaxSize()) ? "'{$size} KB'" : 'null' }},
+                minSize: {{ ($size = $getMinSize()) ? "'{$size} KB'" : 'null' }},
+                removeUploadedFileUsing: async (fileKey) => {
+                    fileHasDeleted = true;
+                    fileHasUploaded = false;
+                    return await $wire.removeUploadedFile(@js($statePath), fileKey)
+                },
+                removeUploadedFileButtonPosition: @js($getRemoveUploadedFileButtonPosition()),
+                reorderUploadedFilesUsing: async (files) => {
+                    return await $wire.reorderUploadedFiles(@js($statePath), files)
+                },
+                shouldAppendFiles: @js($shouldAppendFiles()),
+                shouldOrientImageFromExif: @js($shouldOrientImagesFromExif()),
+                shouldTransformImage: @js($imageCropAspectRatio || $imageResizeTargetHeight || $imageResizeTargetWidth),
+                state: $wire.{{ $applyStateBindingModifiers('entangle(\'' . $statePath . '\')') }},
+                uploadButtonPosition: @js($getUploadButtonPosition()),
+                uploadProgressIndicatorPosition: @js($getUploadProgressIndicatorPosition()),
+                uploadUsing: (fileKey, file, success, error, progress) => {
+                    $wire.upload(`{{ $statePath }}.${fileKey}`, file, () => {
+                        fileHasUploaded = true;
+                        fileHasDeleted = false;
+                        success(fileKey)
+                    }, error, progress)
+                },
+            })"
             wire:ignore
-            {!! ($id = $getId()) ? "id=\"{$id}\"" : null !!}
             style="min-height: {{ $isAvatar() ? '8em' : ($getPanelLayout() === 'compact' ? '2.625em' : '4.75em') }}"
-            {{ $attributes->merge($getExtraAttributes())->class([
-                'filament-forms-file-upload-component',
-                'w-32 mx-auto' => $isAvatar(),
-            ]) }}
-            {{ $getExtraAlpineAttributeBag() }}
+            {{
+                $attributes
+                    ->merge([
+                        'id' => $getId(),
+                    ], escape: false)
+                    ->merge($getExtraAttributes(), escape: false)
+                    ->merge($getExtraAlpineAttributes(), escape: false)
+                    ->class([
+                        'filament-forms-file-upload-component',
+                        'w-32 mx-auto' => $isAvatar(),
+                    ])
+            }}
         >
             <input
                 x-ref="input"
-                {{ $isDisabled() ? 'disabled' : '' }}
-                {{ $isMultiple() ? 'multiple' : '' }}
-                type="file"
-                {{ $getExtraInputAttributeBag() }}
-                dusk="filament.forms.{{ $getStatePath() }}"
+                {{
+                    $getExtraInputAttributeBag()
+                        ->merge([
+                            'disabled' => $isDisabled(),
+                            'dusk' => "filament.forms.{$statePath}",
+                            'multiple' => $isMultiple(),
+                            'type' => 'file',
+                        ], escape: false)
+                }}
             />
         </div>
-
         @php
             $uniquemodalevent = \Illuminate\Support\Str::of($getStatePath())->replace('.','')->replace('_','');
         @endphp
@@ -116,8 +119,6 @@
                     "left-0 w-full cursor-pointer" => !$isAvatar(),
                     "avatar  w-32  cursor-pointer" => $isAvatar(),
             ])
-
-            type="file"
             x-on:change="function(){
                 var fileType = event.target.files[0]['type'];
                 if (!(fileType.search(`image`) >= 0)) {
@@ -133,34 +134,34 @@
                     files: event.target.files,
                 })
             }"/>
-
-
     </div>
 
-    <div x-data="{files:null,}" @on-cropper-modal-show-{{ $uniquemodalevent }}.window="
+    <div wire:key="cropper.modal.container.{{ $getStatePath() }}" x-data="{files:null,}" @on-cropper-modal-show-{{ $uniquemodalevent }}.window="
             files = $event.detail.files;
             id = $event.detail.id;
             $dispatch('open-modal', {id: id})
         ">
-        <x-filament-support::modal
+        <x-filament::modal
             class=""
             width="{{$getModalSize()}}"
             id="cropper-modal-{{ $getStatePath() }}"
         >
-            <x-slot name="heading">
-                <x-filament-support::modal.heading>
+            <x-slot name="header">
+                <x-filament::modal.heading>
                     {{$getModalHeading()}}
-                </x-filament-support::modal.heading>
+                </x-filament::modal.heading>
             </x-slot>
-            <div class=" z-5 w-full h-full flex flex-col justify-between"
-
-                 x-data="imageCropper({
+            <div class="z-5 w-full h-full flex flex-col justify-between"
+                 x-ignore
+                 ax-load
+                 ax-load-src="{{ asset('vendor/filament-cropper/FilamentCropper.js') }}"
+                 x-data="FilamentCropper({
                         imageUrl: '',
-                        shape: `{{$isAvatar()?'circle':'square'}}`,
+                        shape: '{{$isAvatar()?'circle':'square'}}',
                         files: files,
-                        width: `{{$getImageResizeTargetWidth()}}`,
-                        height: `{{$getImageResizeTargetHeight()}}`,
-                        statePath : `{{$getStatePath()}}`,
+                        width: {{$getImageResizeTargetWidth()}},
+                        height: {{$getImageResizeTargetHeight()}},
+                        statePath : '{{$getId()}}',
                         aspectRatio: {{$getImageCropAspectRatioForCropper()}},
                         rotatable: {{$isRotationEnabled()?'true':'false'}},
                         rotateDegree: 0,
@@ -168,7 +169,7 @@
                         viewMode: {{$getViewMode()}},
                         zoomable: {{$isZoomable()?'true':'false'}},
 
-                    })" x-cloak
+                    })"
             >
                 <div class="h-full w-full" wire:ignore>
                     {{-- init Alpine --}}
@@ -329,13 +330,12 @@
                 </div>
 
                 <div class="flex justify-center items-center gap-2">
-                    <x-filament-support::button type="button" x-on:click.prevent="uploadCropperImage()">
+                    <x-filament::button type="button" x-on:click.prevent="uploadCropperImage()">
                         @lang('filament::resources/pages/edit-record.form.actions.save.label')
-                    </x-filament-support::button>
+                    </x-filament::button>
                 </div>
             </div>
 
-        </x-filament-support::modal>
+        </x-filament::modal>
     </div>
-
 </x-dynamic-component>
